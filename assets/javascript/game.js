@@ -30,12 +30,42 @@ let questions = [
     question: 'What did Huntington Beach, CA become known as because of its influence on surfing?',
     choices: ['Surf City', ' Surf Captial', 'Surf City California', 'Surf City, USA'],
     correct: 'Surf City, USA'
+  },
+  {
+    id: 5 ,
+    question: 'Hook Point is a surf break in which of the following regions?',
+    choices: ['Scotland', 'Greenland', 'Namibia', 'Alaska'],
+    correct: 'Alaska'
+  },
+  {
+    id: 6,
+    question: ' Who invented surfing?',
+    choices: ['Fijians', 'Hawaiians', 'Aussies', 'Indonesians'],
+    correct: 'Hawaiians'
+  },
+  {
+    id: 7,
+    question: 'Where is onshore wind blowing?',
+    choices: ['towards the shore', 'away from the shore', 'no wind', 'none of the above'],
+    correct: 'towards the shore'
+  },
+  {
+    id: 8,
+    question: 'What do surfers call it when they get completely covered up by the breaking curl of the wave?',
+    choices: ['Piped', 'Hang Ten', 'Gnarly', 'Tubed'],
+    correct: 'Tubed'
+  },
+  {
+    id: 9,
+    question: 'Where is the most popular surfing spot in the world?',
+    choices: ['California', 'Australia', 'Hawaii', 'Ireland'],
+    correct: 'Hawaii'
   }
 ]
 
 // Creates the HTML for Questions
 questions.forEach(question => {
-  $('.container').append(`
+  $('.questions-container').append(`
     <div class="row">
       <h5 class="question">${question.question}</h5>
      <p>
@@ -62,17 +92,21 @@ questions.forEach(question => {
         <span>${question.choices[3]}</span>
       </label>
     </p>
-      <p class="answer-${question.id}" style="visibility: hidden">${question.correct}</p>
     </div>
   `)
 });
 
-// On Click Functions
+// On Click 
 var qchoice0
 var qchoice1
 var qchoice2
 var qchoice3
 var qchoice4
+var qchoice5
+var qchoice6
+var qchoice7
+var qchoice8
+var qchoice9
 
 $(document).on('click','.choice',function(){
   let temp = $(this).attr('name').split('-')
@@ -97,21 +131,27 @@ let gameTimer = setInterval(function () {
   }
 }, 1000)
 
-// Funcations
+// Functions
 // Finish Game Function
 function finishGame(){
-  let count = 0
+  $('.finishQuiz').css('visibility', 'hidden')
+  let  correctCount = 0
+  let  wrongCount=0
+  let  naCount=0
   for (let i = 0; i < questions.length; i++) {
-    $(`.answer-${i}`).css('visibility', 'visible')
     if (window[`qchoice${i}`] === questions[i].correct) {
-      count++
+      correctCount++
+    } else if (window[`qchoice${i}`] === undefined){
+      naCount++
+    } else {
+      wrongCount++
     }
   }
-  if (count === 5) {
-    alert('Perfect Score!')
-  } else {
-    alert('So Close ! Try Again!')
-  }
+  $('.questions-container').html(`
+    <h4>Correct Answers: ${correctCount}</h4>
+    <h4>Incorrect Answers: ${wrongCount}</h4>
+    <h4>Not Answered: ${naCount}</h4>
+  `)
   clearInterval(gameTimer)
 }
 
