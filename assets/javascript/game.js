@@ -105,6 +105,9 @@ $('.finishQuiz').on('click', function () {
 })
 
 $(document).on('click', '.start-over', function () {
+  correctCount = 0
+  wrongCount = 0
+  naCount = 0
   startOver()
 })
 // ----------------------------------------------------------
@@ -147,11 +150,11 @@ function qCreater() {
 }
 
 // Finish Game Function
+let correctCount = 0
+let wrongCount = 0
+let naCount = 0
 function finishGame() {
   $('.finishQuiz').css('visibility', 'hidden')
-  let correctCount = 0
-  let wrongCount = 0
-  let naCount = 0
   for (let i = 0; i < questions.length; i++) {
     if (window[`qchoice${i}`] === questions[i].correct) {
       correctCount++
@@ -172,15 +175,12 @@ function finishGame() {
 
 // Start Over Function
 function startOver() {
-  correctCount = 0
-  wrongCount = 0
-  naCount = 0
   $('.questions-container').empty()
   $('.finishQuiz').css('visibility', 'visible')
   qCreater()
   time = 120
   $('.time').html('02:00')
-  let gameTimer = setInterval(function () {
+   gameTimer = setInterval(function () {
     time--
     if (time > 0) {
       $('.time').html(timeConverter(time))
