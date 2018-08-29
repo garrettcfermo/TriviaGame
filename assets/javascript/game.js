@@ -1,5 +1,6 @@
 
 // Questions Object
+// ----------------------------------------------------------
 let questions = [
   {
     id: 0,
@@ -32,7 +33,7 @@ let questions = [
     correct: 'Surf City, USA'
   },
   {
-    id: 5 ,
+    id: 5,
     question: 'Hook Point is a surf break in which of the following regions?',
     choices: ['Scotland', 'Greenland', 'Namibia', 'Alaska'],
     correct: 'Alaska'
@@ -62,10 +63,58 @@ let questions = [
     correct: 'Hawaii'
   }
 ]
+// ----------------------------------------------------------
 
-// Creates the HTML for Questions
-questions.forEach(question => {
-  $('.questions-container').append(`
+// User Interface
+// ----------------------------------------------------------
+var qchoice0
+var qchoice1
+var qchoice2
+var qchoice3
+var qchoice4
+var qchoice5
+var qchoice6
+var qchoice7
+var qchoice8
+var qchoice9
+
+// Create Questions
+qCreater()
+
+// Time
+let time = 120
+$('.time').html('02:00')
+let gameTimer = setInterval(function () {
+  time--
+  if (time > 0) {
+    $('.time').html(timeConverter(time))
+  } else {
+    $('.time').html('00:00')
+    finishGame()
+  }
+}, 1000)
+
+$(document).on('click', '.choice', function () {
+  let temp = $(this).attr('name').split('-')
+  let qid = temp[1]
+  window[`qchoice${qid}`] = $(this).attr('data-choice')
+})
+
+$('.finishQuiz').on('click', function () {
+  finishGame()
+})
+
+$(document).on('click', '.start-over', function () {
+  startOver()
+})
+// ----------------------------------------------------------
+
+// Functions
+// ----------------------------------------------------------
+// Creates the Questions Funcations
+function qCreater() {
+  questions.forEach(question => {
+    $('.questions-container').append(`
     <div class="row">
       <h5 class="question">${question.question}</h5>
      <p>
@@ -94,54 +143,19 @@ questions.forEach(question => {
     </p>
     </div>
   `)
-});
+  });
+}
 
-// On Click 
-var qchoice0
-var qchoice1
-var qchoice2
-var qchoice3
-var qchoice4
-var qchoice5
-var qchoice6
-var qchoice7
-var qchoice8
-var qchoice9
-
-$(document).on('click','.choice',function(){
-  let temp = $(this).attr('name').split('-')
-  let qid = temp[1]
-  window[`qchoice${qid}`] = $(this).attr('data-choice')
-})
-
-$('.finishQuiz').on('click',function(){
-    finishGame()
-})
-
-// Time 
-let time = 120
-$('.time').html('02:00')
-let gameTimer = setInterval(function () {
-  time--
-  if (time > 0) {
-    $('.time').html(timeConverter(time))
-  } else {
-    $('.time').html('00:00')
-    finishGame()
-  }
-}, 1000)
-
-// Functions
 // Finish Game Function
-function finishGame(){
+function finishGame() {
   $('.finishQuiz').css('visibility', 'hidden')
-  let  correctCount = 0
-  let  wrongCount=0
-  let  naCount=0
+  let correctCount = 0
+  let wrongCount = 0
+  let naCount = 0
   for (let i = 0; i < questions.length; i++) {
     if (window[`qchoice${i}`] === questions[i].correct) {
       correctCount++
-    } else if (window[`qchoice${i}`] === undefined){
+    } else if (window[`qchoice${i}`] === undefined) {
       naCount++
     } else {
       wrongCount++
@@ -151,11 +165,33 @@ function finishGame(){
     <h5>Correct Answers: ${correctCount}</h5>
     <h5>Incorrect Answers: ${wrongCount}</h5>
     <h5>Not Answered: ${naCount}</h5>
+    <a class="waves-effect waves-light btn-large start-over">Start Over</a>
   `)
   clearInterval(gameTimer)
 }
 
-// Time Function
+// Start Over Function
+function startOver() {
+  correctCount = 0
+  wrongCount = 0
+  naCount = 0
+  $('.questions-container').empty()
+  $('.finishQuiz').css('visibility', 'visible')
+  qCreater()
+  time = 120
+  $('.time').html('02:00')
+  let gameTimer = setInterval(function () {
+    time--
+    if (time > 0) {
+      $('.time').html(timeConverter(time))
+    } else {
+      $('.time').html('00:00')
+      finishGame()
+    }
+  }, 1000)
+}
+
+// Time Converter  Function
 function timeConverter(t) {
   //  Takes the current time in seconds and convert it to minutes and seconds (mm:ss).
   var minutes = Math.floor(t / 60);
@@ -175,3 +211,4 @@ function timeConverter(t) {
 
   return minutes + ":" + seconds;
 }
+// ----------------------------------------------------------
