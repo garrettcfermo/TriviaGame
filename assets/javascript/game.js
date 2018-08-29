@@ -148,9 +148,9 @@ function finishGame(){
     }
   }
   $('.questions-container').html(`
-    <h4>Correct Answers: ${correctCount}</h4>
-    <h4>Incorrect Answers: ${wrongCount}</h4>
-    <h4>Not Answered: ${naCount}</h4>
+    <h5>Correct Answers: ${correctCount}</h5>
+    <h5>Incorrect Answers: ${wrongCount}</h5>
+    <h5>Not Answered: ${naCount}</h5>
   `)
   clearInterval(gameTimer)
 }
